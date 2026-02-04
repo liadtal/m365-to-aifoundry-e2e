@@ -100,7 +100,9 @@ Choose either the Python or C# implementation.
 
 ## Testing
 
-Use the **Agents Playground** to test the bot. Run the following command in your terminal:
+Use the **Agents Playground** to test the bot. For setup instructions, see [Test with Teams Toolkit project](https://learn.microsoft.com/en-us/microsoft-365/agents-sdk/test-with-toolkit-project?tabs=windows).
+
+Run the following command in your terminal:
 
 ```bash
 agentsplayground -e "http://localhost:5130/api/messages" -c "emulator"
