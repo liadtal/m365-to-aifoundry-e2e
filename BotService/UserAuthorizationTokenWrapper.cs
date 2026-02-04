@@ -3,7 +3,7 @@ using Microsoft.Agents.Builder;
 using Microsoft.Agents.Builder.App.UserAuth;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace AzureAgentToM365ATK
+namespace BotService
 {
     /// <summary>
     /// This class wraps the UserAuthorization to provide a TokenCredential implementation as the AI Foundry agent expects a TokenCredential to be used for authentication.
