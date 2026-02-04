@@ -1,0 +1,5 @@
+fastapi
+uvicorn
+azure-identity
+python-dotenv
+agent-framework-azure-ai # Microsoft Agent Framework (--pre flag required during preview)
