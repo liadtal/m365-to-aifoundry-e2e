@@ -61,9 +61,9 @@ Choose either the Python or C# implementation.
     ```
 3.  Create a `.env` file with your Azure AI Foundry details:
     ```env
-    AZURE_OPENAI_API_KEY=your_key
-    AZURE_AIPROJECT_CONNECTION_STRING=your_connection_string
-    # Add other necessary agent framework variables
+    AIServices:AzureAIFoundryProjectEndpoint="https://<your-project>.services.ai.azure.com/api/projects/<your-project-id>"
+    AIServices:ChatAgentID="<your-chat-agent-name>"
+    AIServices:BuilderAgentID="<your-builder-agent-name>"
     ```
 4.  Run the service:
     ```bash
