@@ -27,9 +27,7 @@ graph LR
     *   **Key Feature**: Handles strict JSON contracts and manages Server-Sent Events (SSE) streaming for response generation.
 
 3.  **CoreService (AI Logic)**
-    *   **Technology**: Two implementations provided:
-        *   **Python**: `CoreService` using FastAPI and `agent-framework-azure-ai`.
-        *   **C#**: `CoreServiceCSharp` using `Azure.AI.Projects`.
+    *   **Technology**: **Python**: `CoreService` using FastAPI and `agent-framework-azure-ai`.
     *   **Role**: Connects directly to **Azure AI Foundry**. It executes the Agent logic, runs tools (e.g., specific business logic tools like `get_daily_tasks`), and streams the answer back.
     *   **Default Port**: `8000`.
 
@@ -48,10 +46,6 @@ To run the solution locally, you need to start the services in the reverse order
 
 ### 1. Configure and Run the Core Service
 
-Choose either the Python or C# implementation.
-
-#### Option A: Python (`CoreService`)
-
 1.  Navigate to `CoreService`.
 2.  Create a virtual environment and install dependencies:
     ```bash
@@ -67,18 +61,8 @@ Choose either the Python or C# implementation.
     ```
 4.  Run the service:
     ```bash
-    uvicorn main:app --reload --port 8000
+    uvicorn main:app --host 0.0.0.0 --port 8000
     ```
-
-#### Option B: C# (`CoreServiceCSharp`)
-
-1.  Navigate to `CoreServiceCSharp`.
-2.  Update `AgentService.cs` or `Program.cs` with your Azure AI Foundry Endpoint and Agent ID.
-3.  Run the project:
-    ```bash
-    dotnet run
-    ```
-    Ensure it is listening on `http://localhost:8000`.
 
 ### 2. Run the Backend Service
 
@@ -97,6 +81,7 @@ Choose either the Python or C# implementation.
     ```bash
     dotnet run
     ```
+    Ensure it is listening on `http://localhost:5130`.
 
 ## Testing
 
