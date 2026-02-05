@@ -1,4 +1,4 @@
-namespace BackendService.Models;
+namespace BackendService;
 
 public class SimpleConversation
 {

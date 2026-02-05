@@ -20,7 +20,7 @@ using Microsoft.Extensions.AI;
 using OpenAI.Responses;
 using System.Runtime.CompilerServices;
 
-namespace BotService.Agent;
+namespace BotService;
 
 public class AzureAgent : AgentApplication
 {

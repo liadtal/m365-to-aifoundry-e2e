@@ -1,10 +1,9 @@
 using System.Net.ServerSentEvents;
 using System.Text;
 using System.Text.Json;
-using BackendService.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BackendService.Controllers;
+namespace BackendService;
 
 [ApiController]
 [Route("api/v1/messages")]
