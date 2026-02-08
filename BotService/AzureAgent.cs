@@ -1,91 +1,32 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
-
-using System.ClientModel.Primitives;
-using System.Collections.Concurrent;
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
-using Azure;
-using Azure.AI.Agents.Persistent;
-using Azure.AI.Projects;
-using Azure.AI.Projects.OpenAI;
-using Azure.Identity;
-using Microsoft.Agents.AI;
 using Microsoft.Agents.Builder;
 using Microsoft.Agents.Builder.App;
 using Microsoft.Agents.Builder.State;
 using Microsoft.Agents.Core.Models;
-using Microsoft.Agents.Core.Serialization;
-using Microsoft.Extensions.AI;
-using OpenAI.Responses;
-using System.Runtime.CompilerServices;
 
 namespace BotService;
 
 public class AzureAgent : AgentApplication
 {
-    private record CacheItem(bool IsOldFoundry, IList<AITool> Tools, Response<PersistentAgent> AgentOld, AgentRecord AgentNew);
-    private static ConcurrentDictionary<string, CacheItem> _agentsCache = new();
-
     private readonly ILogger logger;
-    private readonly string agentId;
-    private readonly string agentEndpoint;
-    private readonly string managedIdentityClientId;
 
     public AzureAgent(AgentApplicationOptions options, IConfiguration configuration, ILogger<AzureAgent> logger) : base(options)
     {
         this.logger = logger;
 
-        this.logger.LogWarning($"Creating a new instance of {nameof(AzureAgent)}");
-
-        // Get AI Foundry endpoint
-        this.agentEndpoint = configuration["AIServices:AzureAIFoundryProjectEndpoint"];
-        if (string.IsNullOrEmpty(this.agentEndpoint))
-        {
-            throw new InvalidOperationException("AzureAIFoundryProjectEndpoint is not configured.");
-        }
-
-        // Get AI Foundry agent ID
-        this.agentId = configuration["AIServices:AgentID"];
-        if (string.IsNullOrEmpty(this.agentId))
-        {
-            throw new InvalidOperationException("AgentID is not configured.");
-        }
-
-        // Get the Managed Identity Client ID for authenticating with AI Foundry
-        this.managedIdentityClientId = configuration["AIServices:ManagedIdentityClientId"];
-        if (string.IsNullOrEmpty(this.managedIdentityClientId))
-        {
-            throw new InvalidOperationException("ManagedIdentityClientId is not configured.");
-        }
+        this.logger.LogInformation($"Creating a new instance of {nameof(AzureAgent)}");
 
         // Setup Agent with Route handlers to manage connecting and responding from the Microsoft Foundry agent
 
         // This is handling the sign out event, which will clear the user authorization token.
         OnMessage("--signout", HandleSignOutAsync);
 
-        // This is handling the clearing of the agent model cache without needing to restart the agent. 
-        OnMessage("--clearcache", HandleClearingModelCacheAsync);
-
         // This is handling the message activity, which will send the user message to the Microsoft Foundry agent.
         // we are also indicating which auth profile we want to have available for this handler.
         //OnActivity(ActivityTypes.Message, SendMessageToAzureAgent);
         OnActivity(ActivityTypes.Message, SendMessageToAzureAgent);
-        this.logger.LogWarning($"Successfully created new instance of {nameof(AzureAgent)}: {nameof(this.agentEndpoint)}={this.agentEndpoint}, {nameof(this.agentId)}={this.agentId}, {nameof(this.managedIdentityClientId)}={this.managedIdentityClientId}");
-    }
-
-    /// <summary>
-    /// Handle the clearing of the agent model cache.
-    /// </summary>
-    /// <param name="turnContext"></param>
-    /// <param name="turnState"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    private async Task HandleClearingModelCacheAsync(ITurnContext turnContext, ITurnState turnState, CancellationToken cancellationToken)
-    {
-        _agentsCache.Clear();
-        await turnContext.SendActivityAsync("The agent model cache has been cleared.", cancellationToken: cancellationToken);
-        this.logger.LogInformation("The agent model cache has been cleared.");
+        this.logger.LogInformation($"Successfully created new instance of {nameof(AzureAgent)}");
     }
 
     /// <summary>
