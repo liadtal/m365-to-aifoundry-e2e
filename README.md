@@ -98,6 +98,22 @@ agentsplayground -e "http://localhost:5130/api/messages" -c "emulator"
 3.  The agent processes the request (potentially calling the `get_daily_tasks` tool defined in `main.py`).
 4.  The response is streamed back text-by-text to the chat window.
 
-## License
+### Testing with Insomnia
 
+You can also test the `BackendService` directly using an API client like Insomnia. This is useful for debugging the AI logic without involving the Bot Framework layer.
+
+1.  In Insomnia, create a new **Event Stream Request (SSE)**.
+2.  Set the method to **POST** and the URL to the backend service endpoint: `http://localhost:5000/api/v1/messages`.
+3.  **Set the request body** to JSON with the following payload:
+    ```json
+    {
+      "conversation": {
+        "id": "55c737d5-db10-41bc-997f-1fae97339b92"
+      },
+      "text": "Who are you?"
+    }
+    ```
+4.  **Send the request**. You should see the response from the agent streamed back in the Events tab.
+
+## License
 MIT
